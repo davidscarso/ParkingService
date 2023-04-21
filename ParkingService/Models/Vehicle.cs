@@ -1,4 +1,4 @@
-﻿namespace ParkingService.Domain
+﻿namespace ParkingService.Models
 {
     abstract public class Vehicle
     {

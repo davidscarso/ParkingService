@@ -1,14 +1,14 @@
-﻿namespace ParkingService.Domain
+﻿namespace ParkingService.Models
 {
-    public class VehiculoNoResidente : Vehicle
+    public class OficialVehicle : Vehicle
     {
-        public VehiculoNoResidente(string licensePlate) : base(licensePlate)
+        public OficialVehicle(string licensePlate) : base(licensePlate)
         {
         }
 
         public override VehicleType GetVehicleType()
         {
-            return VehicleType.NON_RESIDENT;
+            return VehicleType.OFICIAL;
         }
 
         public override void ProcessCheckOut()

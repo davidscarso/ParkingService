@@ -1,4 +1,4 @@
-﻿namespace ParkingService.Domain
+﻿namespace ParkingService.Models
 {
     public class ParkingFee
     {
