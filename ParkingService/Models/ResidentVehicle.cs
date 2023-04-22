@@ -7,6 +7,7 @@
         public ResidentVehicle(string licensePlate) : base(licensePlate)
         {
             TotalTime = 0;
+            VehicleType = VehicleType.RESIDENT;
         }
 
         public override void ProcessCheckOut()
@@ -14,9 +15,5 @@
             throw new NotImplementedException();
         }
 
-        public override VehicleType GetVehicleType()
-        {
-            return VehicleType.RESIDENT;
-        }
     }
 }

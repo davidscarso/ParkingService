@@ -1,16 +1,28 @@
-﻿namespace ParkingService.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ParkingService.Models
 {
     public class Stay
     {
-        public TimeSpan CheckInTime { get; }
-        public TimeSpan CheckOutTime { get; }
-        public OficialVehicle Vehicle { get; }
+        [Key]
+        public Guid Id { get; set; }
 
-        public Stay(TimeSpan checkInTime, OficialVehicle vehicle)
+        [Required]
+        public DateTime CheckInTime { get; set; }
+
+        [Required]
+        public DateTime CheckOutTime { get; set; }
+
+        [Required]
+        public Guid VehicleId { get; set; }
+
+        public Stay(DateTime checkInTime, Guid vehicleId)
         {
+            Id = Guid.NewGuid();
+
             CheckInTime = checkInTime;
-            CheckOutTime = DateTime.Today.TimeOfDay;
-            Vehicle = vehicle;
+            CheckOutTime = DateTime.Today;
+            VehicleId = vehicleId;
         }
     }
 }

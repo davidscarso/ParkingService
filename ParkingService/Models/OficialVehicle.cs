@@ -4,11 +4,7 @@
     {
         public OficialVehicle(string licensePlate) : base(licensePlate)
         {
-        }
-
-        public override VehicleType GetVehicleType()
-        {
-            return VehicleType.OFICIAL;
+            VehicleType = VehicleType.OFICIAL;
         }
 
         public override void ProcessCheckOut()

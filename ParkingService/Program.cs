@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using ParkingService;
 using ParkingService.Infrastructure;
 using ParkingService.Infrastructure.Interfaces;
-using ParkingService.Models;
 using ParkingService.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);

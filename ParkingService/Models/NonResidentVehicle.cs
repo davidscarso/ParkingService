@@ -4,11 +4,7 @@
     {
         public VehiculoNoResidente(string licensePlate) : base(licensePlate)
         {
-        }
-
-        public override VehicleType GetVehicleType()
-        {
-            return VehicleType.NON_RESIDENT;
+            VehicleType = VehicleType.NON_RESIDENT;
         }
 
         public override void ProcessCheckOut()
