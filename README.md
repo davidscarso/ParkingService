@@ -1,4 +1,9 @@
 # ParkingService
-1. From the Packege manager console run the next command:```PM> Add-Migration "Initial Create"``` Remembe that To undo this action, use ```Remove-Migration```.
-2. Them run the next one to update the data base: ```MP> Update-Database```
-3. 
+1. From the Packege manager console run ```MP> Update-Database``` to update te database.
+2. Using the api swagger add parking Fees, remember thas vehicle type  are:
+  0 to Oficial Vehicle
+  1 to Resident Vehicle
+  2 to Non Resident Vehicle
+3. Using ther interface crate vehicles: API/Parking
+
+The db conection is in appsettings.json and the database name is "ParkingServiceDB"
