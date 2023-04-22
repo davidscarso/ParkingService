@@ -6,10 +6,6 @@
         {
             VehicleType = VehicleType.OFICIAL;
         }
-
-        public override void ProcessCheckOut()
-        {
-            throw new NotImplementedException();
-        }
+              
     }
 }

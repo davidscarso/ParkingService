@@ -12,14 +12,17 @@ namespace ParkingService.Infrastructure
             _context = context;
         }
 
-        public Task<ParkingFee> Add(ParkingFee item)
+        public async Task<ParkingFee> Add(ParkingFee parkingFee)
         {
-            throw new NotImplementedException();
+            _context.ParkingFees.Add(parkingFee);
+            await _context.SaveChangesAsync();
+
+            return await _context.ParkingFees.FindAsync(parkingFee.Id);
         }
 
         public IEnumerable<ParkingFee> AsEnumerable()
         {
-            throw new NotImplementedException();
+            return _context.ParkingFees;
         }
     }
 }

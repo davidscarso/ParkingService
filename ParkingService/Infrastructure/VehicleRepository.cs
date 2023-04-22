@@ -1,5 +1,6 @@
-﻿using ParkingService.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using ParkingService.Infrastructure.Interfaces;
+using ParkingService.Models;
 
 namespace ParkingService.Infrastructure
 {
@@ -12,14 +13,30 @@ namespace ParkingService.Infrastructure
             _context = context;
         }
 
-        public Task<Vehicle> Add(Vehicle item)
+        public async Task<Vehicle> Add(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+
+            _context.Vehicles.Add(vehicle);
+            await _context.SaveChangesAsync();
+
+            return await _context.Vehicles.FindAsync(vehicle.Id);
         }
 
         public IEnumerable<Vehicle> AsEnumerable()
         {
-            throw new NotImplementedException();
+            //return _context.Vehicles;
+
+            return _context.Vehicles.ToList();
+        }
+
+        public async Task<Vehicle> Update(Vehicle vehicle)
+        {
+            _context.Entry(vehicle).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return await _context.Vehicles.FindAsync(vehicle.Id);
+
         }
     }
 }

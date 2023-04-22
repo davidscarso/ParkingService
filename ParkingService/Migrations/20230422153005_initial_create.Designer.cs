@@ -12,8 +12,8 @@ using ParkingService;
 namespace ParkingService.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20230422051420_Added all models")]
-    partial class Addedallmodels
+    [Migration("20230422153005_initial_create")]
+    partial class initial_create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -81,11 +81,9 @@ namespace ParkingService.Migrations
 
             modelBuilder.Entity("ParkingService.Models.Vehicle", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()

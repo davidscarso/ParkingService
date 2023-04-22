@@ -5,10 +5,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ParkingService.Migrations
 {
-    public partial class Addedallmodels : Migration
+    public partial class initial_create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "CheckIns",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LicensePlate = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    CheckInTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckIns", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ParkingFees",
                 columns: table => new
@@ -40,8 +53,7 @@ namespace ParkingService.Migrations
                 name: "Vehicles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LicensePlate = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     VehicleType = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     TotalTime = table.Column<int>(type: "int", nullable: true)
@@ -54,6 +66,9 @@ namespace ParkingService.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CheckIns");
+
             migrationBuilder.DropTable(
                 name: "ParkingFees");
 

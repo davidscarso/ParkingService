@@ -11,6 +11,6 @@ namespace ParkingService.Services.Interfaces
         public Task<OficialVehicleDto> AddOficialVehicle(AddOficialVehicleRequest request);
 
         public void StartMonth();
-        public Task<IEnumerable<PaymentReportDto>> GenerateResidentPayment();
+        public IEnumerable<PaymentReportDto> GenerateResidentPayment();
     }
 }

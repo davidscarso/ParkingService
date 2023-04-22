@@ -29,34 +29,37 @@ namespace ParkingService.Controllers
         [Route("CheckOut")]
         public async Task<ActionResult<CheckOutDto>> CheckOut(CheckOutRequest request)
         {
-            return NotFound();
+            return await _parkingService.CheckOut(request);
         }
 
         [HttpPost]
         [Route("AddResidentVehicle")]
         public async Task<ActionResult<ResidentVehicleDto>> AddResidentVehicle(AddResidentVehicleRequest request)
         {
-            return NotFound();
+            return await _parkingService.AddResidentVehicle(request);
+
         }
 
         [HttpPost]
         [Route("AddOficialVehicle")]
         public async Task<ActionResult<OficialVehicleDto>> AddOficialVehicle(AddOficialVehicleRequest request)
         {
-            return NotFound();
+            return await _parkingService.AddOficialVehicle(request);
+
         }
 
         [HttpPost]
         [Route("StartMonth")]
         public void StartMonth()
         {
+            _parkingService.StartMonth();
         }
 
         [HttpGet]
         [Route("GenerateResidentPayment")]
         public async Task<ActionResult<IEnumerable<PaymentReportDto>>> GenerateResidentPayment()
         {
-            var result = await _parkingService.GenerateResidentPayment();
+            var result = _parkingService.GenerateResidentPayment();
 
             if (result == null) return NotFound();
 

@@ -12,5 +12,13 @@
 
         public decimal Amount { get; set; }
 
+        public CheckOutDto(string licensePlate, DateTime checkInTime, DateTime checkOutTime, int totalTime, decimal amount)
+        {
+            LicensePlate = licensePlate;
+            CheckInTime = checkInTime;
+            CheckOutTime = checkOutTime;
+            TotalTime = totalTime;
+            Amount = amount;
+        }
     }
 }

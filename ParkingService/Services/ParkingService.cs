@@ -3,6 +3,7 @@ using ParkingService.Dto.Input;
 using ParkingService.Dto.Output;
 using ParkingService.Infrastructure.Interfaces;
 using ParkingService.Services.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace ParkingService.Services
 {
@@ -24,20 +25,37 @@ namespace ParkingService.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public Task<OficialVehicleDto> AddOficialVehicle(AddOficialVehicleRequest request)
+        public async Task<OficialVehicleDto> AddOficialVehicle(AddOficialVehicleRequest request)
         {
-            throw new NotImplementedException();
+            Regex re = new Regex("^[A-Z]{3}-[0-9]{5}$");
+            if (!re.IsMatch(request.LicensePlate))
+                return null;
 
+            var added = (OficialVehicle)(await _vehicleRepository.Add(new OficialVehicle(request.LicensePlate)));
 
-            _vehicleRepository.Add(new OficialVehicle(request.LicensePlate));
+            if (added != null)
+            {
+                return new OficialVehicleDto(added.Id, added.LicensePlate);
+            }
+
+            return null;
 
         }
 
-        public Task<ResidentVehicleDto> AddResidentVehicle(AddResidentVehicleRequest request)
+        public async Task<ResidentVehicleDto> AddResidentVehicle(AddResidentVehicleRequest request)
         {
-            throw new NotImplementedException();
+            Regex re = new Regex("^[A-Z]{3}-[0-9]{5}$");
+            if (!re.IsMatch(request.LicensePlate))
+                return null;
 
-            _vehicleRepository.Add(new ResidentVehicle(request.LicensePlate));
+            var added = (ResidentVehicle)(await _vehicleRepository.Add(new ResidentVehicle(request.LicensePlate)));
+
+            if (added != null)
+            {
+                return new ResidentVehicleDto(added.Id, added.LicensePlate, added.TotalTime);
+            }
+
+            return null;
         }
 
         public async Task<CheckInDto> CheckIn(CheckInRequest request)
@@ -51,32 +69,79 @@ namespace ParkingService.Services
             return null;
         }
 
-        public Task<CheckOutDto> CheckOut(CheckOutRequest request)
+        public async Task<CheckOutDto> CheckOut(CheckOutRequest request)
         {
-            throw new NotImplementedException();
-
             var aCheckIn = _checkInRepository
                 .AsEnumerable()
                 .Where(x => x.LicensePlate == request.LicensePlate)
                 .SingleOrDefault();
+            if (aCheckIn == null) throw new Exception("CheckIn not found");
 
             var aVehicle = _vehicleRepository
                 .AsEnumerable()
                 .Where(x => x.LicensePlate == request.LicensePlate)
                 .SingleOrDefault();
 
-            aVehicle.ProcessCheckOut();
+
+            var checkOutTime = DateTime.Now;
+            var totalMinutes = (int)checkOutTime.Subtract(aCheckIn.CheckInTime).TotalMinutes;
+
+            var vehicleType = aVehicle == null ? VehicleType.NON_RESIDENT : aVehicle.VehicleType;
+
+            var fees = _parkingFeeRepository.AsEnumerable();
+            var fee = fees.Where(x => x.VehicleType == vehicleType).SingleOrDefault();
+
+            if (fee == null) throw new Exception("Parking Fee not found");
+
+            var amount = fee.Fee * totalMinutes;
+
+            var checkOutDto = new CheckOutDto(aCheckIn.LicensePlate, aCheckIn.CheckInTime, checkOutTime, totalMinutes, amount);
+
+            if (vehicleType == VehicleType.RESIDENT)
+            {
+                ((ResidentVehicle)aVehicle).AddMinutes(totalMinutes);
+                await _vehicleRepository.Update(aVehicle);
+            }
+
+            if (vehicleType == VehicleType.OFICIAL)
+            {
+                var addedStay = await _stayRepository.Add(new Stay(aCheckIn.CheckInTime, checkOutTime, aVehicle.Id));
+            }
+
+            await _checkInRepository.DeleteAsync(aCheckIn.Id);
+            return checkOutDto;
         }
 
 
-        public Task<IEnumerable<PaymentReportDto>> GenerateResidentPayment()
+        public IEnumerable<PaymentReportDto> GenerateResidentPayment()
         {
-            throw new NotImplementedException();
+            var fee = _parkingFeeRepository.AsEnumerable().Where(x => x.VehicleType == VehicleType.RESIDENT).SingleOrDefault();
+            if (fee == null)
+                throw new Exception("Parking Fee not found");
+            else
+            {
+                var residents = _vehicleRepository.AsEnumerable().Where(x => x.VehicleType == VehicleType.RESIDENT);
+
+                var records = residents.Select(x => new PaymentReportDto(x.LicensePlate, ((ResidentVehicle)x).TotalTime, ((ResidentVehicle)x).TotalTime * fee.Fee));
+
+                return records;
+            }
         }
 
         public void StartMonth()
         {
-            throw new NotImplementedException();
+            //Delete all Stays
+            _stayRepository.DeleteAll();
+
+            //Update TotalTime to 0 y ResidenteVehicles
+            var residents = _vehicleRepository.AsEnumerable().Where(x => x.VehicleType == VehicleType.RESIDENT);
+
+            foreach (var residentVehicle in residents)
+            {
+                ((ResidentVehicle)residentVehicle).TotalTime = 0;
+                _vehicleRepository.Update(residentVehicle);
+            }
+
         }
     }
 }

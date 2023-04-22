@@ -26,5 +26,15 @@ namespace ParkingService.Infrastructure
         {
             return _context.CheckIns;
         }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var checkIn = await _context.CheckIns.FindAsync(id);
+            if (checkIn != null)
+            {
+                _context.CheckIns.Remove(checkIn);
+                _context.SaveChangesAsync();
+            }
+        }
     }
 }

@@ -9,11 +9,9 @@
             TotalTime = 0;
             VehicleType = VehicleType.RESIDENT;
         }
-
-        public override void ProcessCheckOut()
+        public void AddMinutes(int minutes)
         {
-            throw new NotImplementedException();
+            TotalTime += minutes;
         }
-
     }
 }

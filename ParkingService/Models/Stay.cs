@@ -16,12 +16,12 @@ namespace ParkingService.Models
         [Required]
         public Guid VehicleId { get; set; }
 
-        public Stay(DateTime checkInTime, Guid vehicleId)
+        public Stay(DateTime checkInTime, DateTime checkOutTime, Guid vehicleId)
         {
             Id = Guid.NewGuid();
 
             CheckInTime = checkInTime;
-            CheckOutTime = DateTime.Today;
+            CheckOutTime = checkOutTime;
             VehicleId = vehicleId;
         }
     }

@@ -12,14 +12,24 @@ namespace ParkingService.Infrastructure
             _context = context;
         }
 
-        public Task<Stay> Add(Stay item)
+        public async Task<Stay> Add(Stay stay)
         {
-            throw new NotImplementedException();
+            _context.Stays.Add(stay);
+            await _context.SaveChangesAsync();
+
+            return await _context.Stays.FindAsync(stay.Id);
         }
 
         public IEnumerable<Stay> AsEnumerable()
         {
-            throw new NotImplementedException();
+            return _context.Stays;
+        }
+
+        public void DeleteAll()
+        {
+            _context.Stays.RemoveRange(_context.Stays.ToList());
+
+            _context.SaveChangesAsync();
         }
     }
 }

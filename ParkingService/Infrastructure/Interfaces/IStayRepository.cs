@@ -4,5 +4,6 @@ namespace ParkingService.Infrastructure.Interfaces
 {
     public interface IStayRepository : IRepository<Stay>
     {
+        public void DeleteAll();
     }
 }

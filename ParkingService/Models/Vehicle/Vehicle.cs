@@ -7,13 +7,14 @@ namespace ParkingService.Models
     abstract public class Vehicle
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// XXX-00000
         /// </summary>
         [Required]
-        [Column(TypeName = "nvarchar(10)")]
+        [Column(TypeName = "nvarchar(9)")]
+        [RegularExpression(@"^[A-Z]{3}-[0-9]{5}$")]
         public string LicensePlate { get; set; } = "";
 
         [Required]
@@ -21,10 +22,9 @@ namespace ParkingService.Models
 
         protected Vehicle(string licensePlate)
         {
+            Id = Guid.NewGuid();
             LicensePlate = licensePlate;
         }
-
-        public abstract void ProcessCheckOut();
     }
 
 }
