@@ -1,6 +1,6 @@
-﻿using ParkingService.Domain;
+﻿using ParkingService.Models;
 
-namespace ParkingService.Interfaces
+namespace ParkingService.Infrastructure.Interfaces
 {
     public interface IParkingFeeRepository : IRepository<ParkingFee>
     {

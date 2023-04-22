@@ -17,7 +17,6 @@ namespace ParkingService.Models
         public DateTime CheckInTime { get; set; } = DateTime.Now;
 
 
-
         public CheckIn(string licensePlate)
         {
             Id = Guid.NewGuid();

@@ -1,18 +1,30 @@
-﻿using ParkingService.Domain;
-using ParkingService.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ParkingService.Infrastructure.Interfaces;
+using ParkingService.Models;
+using System.Threading.Tasks;
 
 namespace ParkingService.Infrastructure
 {
     public class CheckInRepository : ICheckInRepository
     {
-        public void Add(CheckIn item)
+        private readonly APIDbContext _context;
+
+        public CheckInRepository(APIDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task<CheckIn> Add(CheckIn checkIn)
+        {
+            _context.CheckIns.Add(checkIn);
+            await _context.SaveChangesAsync();
+
+            return await _context.CheckIns.FindAsync(checkIn.Id);
         }
 
         public IEnumerable<CheckIn> AsEnumerable()
         {
-            throw new NotImplementedException();
+            return _context.CheckIns;
         }
     }
 }

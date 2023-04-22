@@ -1,11 +1,18 @@
-﻿using ParkingService.Domain;
-using ParkingService.Interfaces;
+﻿using ParkingService.Models;
+using ParkingService.Infrastructure.Interfaces;
 
 namespace ParkingService.Infrastructure
 {
     public class ParkingFeeRepository : IParkingFeeRepository
     {
-        public void Add(ParkingFee item)
+        private readonly APIDbContext _context;
+
+        public ParkingFeeRepository(APIDbContext context)
+        {
+            _context = context;
+        }
+
+        public Task<ParkingFee> Add(ParkingFee item)
         {
             throw new NotImplementedException();
         }

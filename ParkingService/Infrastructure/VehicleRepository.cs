@@ -1,11 +1,18 @@
-﻿using ParkingService.Domain;
-using ParkingService.Interfaces;
+﻿using ParkingService.Models;
+using ParkingService.Infrastructure.Interfaces;
 
 namespace ParkingService.Infrastructure
 {
     public class VehicleRepository : IVehicleRepository
     {
-        public void Add(Vehicle item)
+        private readonly APIDbContext _context;
+
+        public VehicleRepository(APIDbContext context)
+        {
+            _context = context;
+        }
+
+        public Task<Vehicle> Add(Vehicle item)
         {
             throw new NotImplementedException();
         }

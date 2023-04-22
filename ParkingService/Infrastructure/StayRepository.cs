@@ -1,11 +1,18 @@
-﻿using ParkingService.Domain;
-using ParkingService.Interfaces;
+﻿using ParkingService.Models;
+using ParkingService.Infrastructure.Interfaces;
 
 namespace ParkingService.Infrastructure
 {
     public class StayRepository : IStayRepository
     {
-        public void Add(Stay item)
+        private readonly APIDbContext _context;
+
+        public StayRepository(APIDbContext context)
+        {
+            _context = context;
+        }
+
+        public Task<Stay> Add(Stay item)
         {
             throw new NotImplementedException();
         }

@@ -1,7 +1,8 @@
-﻿using ParkingService.Domain;
+﻿using ParkingService.Models;
 using ParkingService.Dto.Input;
 using ParkingService.Dto.Output;
-using ParkingService.Interfaces;
+using ParkingService.Infrastructure.Interfaces;
+using ParkingService.Services.Interfaces;
 
 namespace ParkingService.Services
 {
@@ -23,23 +24,37 @@ namespace ParkingService.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public void AddOficialVehicle(AddOficialVehicleRequest request)
+        public Task<OficialVehicleDto> AddOficialVehicle(AddOficialVehicleRequest request)
         {
+            throw new NotImplementedException();
+
+
             _vehicleRepository.Add(new OficialVehicle(request.LicensePlate));
+
         }
 
-        public void AddResidentVehicle(AddResidentVehicleRequest request)
+        public Task<ResidentVehicleDto> AddResidentVehicle(AddResidentVehicleRequest request)
         {
+            throw new NotImplementedException();
+
             _vehicleRepository.Add(new ResidentVehicle(request.LicensePlate));
         }
 
-        public void CheckIn(CheckInRequest request)
+        public async Task<CheckInDto> CheckIn(CheckInRequest request)
         {
-            _checkInRepository.Add(new CheckIn(request.LicensePlate));
+            var savedCheckIn = await _checkInRepository.Add(new CheckIn(request.LicensePlate));
+            if (savedCheckIn != null)
+            {
+                return new CheckInDto(savedCheckIn.Id, savedCheckIn.LicensePlate, savedCheckIn.CheckInTime);
+            }
+
+            return null;
         }
 
-        public void CheckOut(CheckOutRequest request)
+        public Task<CheckOutDto> CheckOut(CheckOutRequest request)
         {
+            throw new NotImplementedException();
+
             var aCheckIn = _checkInRepository
                 .AsEnumerable()
                 .Where(x => x.LicensePlate == request.LicensePlate)
@@ -53,7 +68,8 @@ namespace ParkingService.Services
             aVehicle.ProcessCheckOut();
         }
 
-        public IEnumerable<PaymentReportDto> GenerateResidentPayment()
+
+        public Task<IEnumerable<PaymentReportDto>> GenerateResidentPayment()
         {
             throw new NotImplementedException();
         }
