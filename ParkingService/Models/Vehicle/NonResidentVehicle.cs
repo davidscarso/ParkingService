@@ -1,6 +1,6 @@
 ﻿namespace ParkingService.Models
 {
-    public class NonResidentVehicle : Vehicle
+    public class NonResidentVehicle : VehicleBase
     {
         public NonResidentVehicle(string licensePlate) : base(licensePlate)
         {

@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ParkingService.Models
 {
-    abstract public class Vehicle
+    [Microsoft.EntityFrameworkCore.Index(nameof(LicensePlate), IsUnique = true)]
+
+    abstract public class VehicleBase
     {
         [Key]
         public Guid Id { get; set; }
@@ -20,7 +22,7 @@ namespace ParkingService.Models
         [Required]
         public VehicleType VehicleType { get; protected set; }
 
-        protected Vehicle(string licensePlate)
+        protected VehicleBase(string licensePlate)
         {
             Id = Guid.NewGuid();
             LicensePlate = licensePlate;

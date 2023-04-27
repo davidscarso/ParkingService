@@ -1,6 +1,6 @@
 ﻿namespace ParkingService.Models
 {
-    public class ResidentVehicle : Vehicle
+    public class ResidentVehicle : VehicleBase
     {
         public int TotalTime { get; set; }
 

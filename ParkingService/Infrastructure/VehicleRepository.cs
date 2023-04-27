@@ -13,7 +13,7 @@ namespace ParkingService.Infrastructure
             _context = context;
         }
 
-        public async Task<Vehicle> Add(Vehicle vehicle)
+        public async Task<VehicleBase> Add(VehicleBase vehicle)
         {
 
             _context.Vehicles.Add(vehicle);
@@ -22,14 +22,14 @@ namespace ParkingService.Infrastructure
             return await _context.Vehicles.FindAsync(vehicle.Id);
         }
 
-        public IEnumerable<Vehicle> AsEnumerable()
+        public IEnumerable<VehicleBase> AsEnumerable()
         {
             //return _context.Vehicles;
 
             return _context.Vehicles.ToList();
         }
 
-        public async Task<Vehicle> Update(Vehicle vehicle)
+        public async Task<VehicleBase> Update(VehicleBase vehicle)
         {
             _context.Entry(vehicle).State = EntityState.Modified;
 

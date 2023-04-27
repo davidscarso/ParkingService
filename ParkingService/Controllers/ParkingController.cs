@@ -23,6 +23,31 @@ namespace ParkingService.Controllers
         public async Task<ActionResult<CheckInDto>> CheckIn(CheckInRequest request)
         {
             return await _parkingService.CheckIn(request);
+            //if (_context.OficialVehicles == null)
+            //{
+            //    return Problem("Entity set 'APIDbContext.OficialVehicle'  is null.");
+            //}
+            //_context.OficialVehicles.Add(oficialVehicle);
+            //await _context.SaveChangesAsync();
+
+            //return CreatedAtAction("GetOficialVehicle", new { id = oficialVehicle.Id }, oficialVehicle);
+
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!StayExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+
         }
 
         [HttpPost]

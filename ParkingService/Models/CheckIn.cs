@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Net.Mime;
 
 namespace ParkingService.Models
 {
+    [Index(nameof(LicensePlate), IsUnique = true)]
     public class CheckIn
     {
         [Key]
         public Guid Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(10)")]
+        [Column(TypeName = "nvarchar(9)")]
         public string LicensePlate { get; set; } = "";
 
         [Required]
