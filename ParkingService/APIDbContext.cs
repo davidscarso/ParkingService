@@ -29,7 +29,7 @@ namespace ParkingService
             });
         }
 
-        public DbSet<ResidentVehicle>? ResidentVehicle { get; set; }
+        public DbSet<ResidentVehicle>? ResidentVehicles { get; set; }
 
         public DbSet<OficialVehicle>? OficialVehicles { get; set; }
     }

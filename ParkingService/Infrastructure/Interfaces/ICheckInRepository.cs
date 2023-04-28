@@ -5,5 +5,6 @@ namespace ParkingService.Infrastructure.Interfaces
     public interface ICheckInRepository : IRepository<CheckIn>
     {
         public Task DeleteAsync(Guid id);
+        public bool Exists(string licensePlate);
     }
 }

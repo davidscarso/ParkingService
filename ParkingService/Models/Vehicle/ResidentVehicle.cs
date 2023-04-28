@@ -13,5 +13,9 @@
         {
             TotalTime += minutes;
         }
+        public void RestartMinutes()
+        {
+            TotalTime = 0;
+        }
     }
 }

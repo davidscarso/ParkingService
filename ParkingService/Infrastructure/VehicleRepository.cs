@@ -26,17 +26,22 @@ namespace ParkingService.Infrastructure
         {
             //return _context.Vehicles;
 
-            return _context.Vehicles.ToList();
+            return _context.Vehicles;
         }
 
         public async Task<VehicleBase> Update(VehicleBase vehicle)
         {
-            _context.Entry(vehicle).State = EntityState.Modified;
+            _context.Vehicles.Update(vehicle);
 
             await _context.SaveChangesAsync();
 
-            return await _context.Vehicles.FindAsync(vehicle.Id);
+            return vehicle;
 
+        }
+
+        public bool Exists(string licensePlate)
+        {
+            return (_context.Vehicles?.Any(e => e.LicensePlate == licensePlate)).GetValueOrDefault();
         }
     }
 }

@@ -4,6 +4,9 @@ using ParkingService.Dto.Output;
 using ParkingService.Infrastructure.Interfaces;
 using ParkingService.Services.Interfaces;
 using System.Text.RegularExpressions;
+using ParkingService.Services.Exceptions;
+using ParkingService.Utils;
+using System.Linq;
 
 namespace ParkingService.Services
 {
@@ -27,9 +30,18 @@ namespace ParkingService.Services
 
         public async Task<OficialVehicleDto> AddOficialVehicle(AddOficialVehicleRequest request)
         {
-            Regex re = new Regex("^[A-Z]{3}-[0-9]{5}$");
-            if (!re.IsMatch(request.LicensePlate))
-                return null;
+            if (request.LicensePlate == null)
+                throw new AddVehicleLicensePlateNullException();
+
+            if (string.IsNullOrWhiteSpace(request.LicensePlate))
+                throw new AddVehicleLicensePlateEmptyException();
+
+            if (!Validator.IsValidLicensePlate(request.LicensePlate))
+                throw new AddVehicleLicensePlateInvalidException();
+
+            if (_vehicleRepository.Exists(request.LicensePlate))
+                throw new AddVehicleLicensePlateAlreadyExistsException();
+
 
             var added = (OficialVehicle)(await _vehicleRepository.Add(new OficialVehicle(request.LicensePlate)));
 
@@ -39,14 +51,21 @@ namespace ParkingService.Services
             }
 
             return null;
-
         }
 
         public async Task<ResidentVehicleDto> AddResidentVehicle(AddResidentVehicleRequest request)
         {
-            Regex re = new Regex("^[A-Z]{3}-[0-9]{5}$");
-            if (!re.IsMatch(request.LicensePlate))
-                return null;
+            if (request.LicensePlate == null)
+                throw new AddVehicleLicensePlateNullException();
+
+            if (string.IsNullOrWhiteSpace(request.LicensePlate))
+                throw new AddVehicleLicensePlateEmptyException();
+
+            if (!Validator.IsValidLicensePlate(request.LicensePlate))
+                throw new AddVehicleLicensePlateInvalidException();
+
+            if (_vehicleRepository.Exists(request.LicensePlate))
+                throw new AddVehicleLicensePlateAlreadyExistsException();
 
             var added = (ResidentVehicle)(await _vehicleRepository.Add(new ResidentVehicle(request.LicensePlate)));
 
@@ -60,10 +79,26 @@ namespace ParkingService.Services
 
         public async Task<CheckInDto> CheckIn(CheckInRequest request)
         {
+            if (request.LicensePlate == null)
+                throw new CheckInLicensePlateNullException();
+
+            if (string.IsNullOrWhiteSpace(request.LicensePlate))
+                throw new CheckInLicensePlateEmptyException();
+
+            if (!Validator.IsValidLicensePlate(request.LicensePlate))
+                throw new CheckInLicensePlateInvalidException();
+
+            if (_checkInRepository.Exists(request.LicensePlate))
+                throw new CheckInLicensePlateAlreadyExistsException();
+
+
             var savedCheckIn = await _checkInRepository.Add(new CheckIn(request.LicensePlate));
+
             if (savedCheckIn != null)
             {
-                return new CheckInDto(savedCheckIn.Id, savedCheckIn.LicensePlate, savedCheckIn.CheckInTime);
+                return new CheckInDto(savedCheckIn.Id,
+                                      savedCheckIn.LicensePlate,
+                                      savedCheckIn.CheckInTime);
             }
 
             return null;
@@ -71,11 +106,23 @@ namespace ParkingService.Services
 
         public async Task<CheckOutDto> CheckOut(CheckOutRequest request)
         {
+            if (request.LicensePlate == null)
+                throw new CheckOutLicensePlateNullException();
+
+            if (string.IsNullOrWhiteSpace(request.LicensePlate))
+                throw new CheckOutLicensePlateEmptyException();
+
+            if (!Validator.IsValidLicensePlate(request.LicensePlate))
+                throw new CheckOutLicensePlateInvalidException();
+
+            if (!_checkInRepository.Exists(request.LicensePlate))
+                throw new CheckOutCheckInNotFoundException();
+
+
             var aCheckIn = _checkInRepository
                 .AsEnumerable()
                 .Where(x => x.LicensePlate == request.LicensePlate)
                 .SingleOrDefault();
-            if (aCheckIn == null) throw new Exception("CheckIn not found");
 
             var aVehicle = _vehicleRepository
                 .AsEnumerable()
@@ -91,7 +138,7 @@ namespace ParkingService.Services
             var fees = _parkingFeeRepository.AsEnumerable();
             var fee = fees.Where(x => x.VehicleType == vehicleType).SingleOrDefault();
 
-            if (fee == null) throw new Exception("Parking Fee not found");
+            if (fee == null) throw new CheckOutFeeNotExistsException("Parking Fee not found");
 
             var amount = fee.Fee * totalMinutes;
 
@@ -138,8 +185,8 @@ namespace ParkingService.Services
 
             foreach (var residentVehicle in residents)
             {
-                ((ResidentVehicle)residentVehicle).TotalTime = 0;
-                _vehicleRepository.Update(residentVehicle);
+                ((ResidentVehicle)residentVehicle).RestartMinutes();
+                _vehicleRepository.Update(((ResidentVehicle)residentVehicle));
             }
 
         }

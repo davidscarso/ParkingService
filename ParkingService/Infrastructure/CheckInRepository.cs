@@ -24,7 +24,7 @@ namespace ParkingService.Infrastructure
 
         public IEnumerable<CheckIn> AsEnumerable()
         {
-            return _context.CheckIns;
+            return _context.CheckIns.AsNoTracking();
         }
 
         public async Task DeleteAsync(Guid id)
@@ -35,6 +35,11 @@ namespace ParkingService.Infrastructure
                 _context.CheckIns.Remove(checkIn);
                 _context.SaveChangesAsync();
             }
+        }
+
+        public bool Exists(string licensePlate)
+        {
+            return (_context.CheckIns?.Any(e => e.LicensePlate == licensePlate)).GetValueOrDefault();
         }
     }
 }
