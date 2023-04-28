@@ -1,6 +1,6 @@
 ﻿namespace ParkingService.Models
 {
-    public class ResidentVehicle : Vehicle
+    public class ResidentVehicle : VehicleBase
     {
         public int TotalTime { get; set; }
 
@@ -12,6 +12,10 @@
         public void AddMinutes(int minutes)
         {
             TotalTime += minutes;
+        }
+        public void RestartMinutes()
+        {
+            TotalTime = 0;
         }
     }
 }

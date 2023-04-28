@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ParkingService;
 using ParkingService.Models;
 
 namespace ParkingService.Controllers
@@ -25,10 +19,10 @@ namespace ParkingService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ParkingFee>>> GetParkingFees()
         {
-          if (_context.ParkingFees == null)
-          {
-              return NotFound();
-          }
+            if (_context.ParkingFees == null)
+            {
+                return NotFound();
+            }
             return await _context.ParkingFees.ToListAsync();
         }
 
@@ -36,10 +30,10 @@ namespace ParkingService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ParkingFee>> GetParkingFee(Guid id)
         {
-          if (_context.ParkingFees == null)
-          {
-              return NotFound();
-          }
+            if (_context.ParkingFees == null)
+            {
+                return NotFound();
+            }
             var parkingFee = await _context.ParkingFees.FindAsync(id);
 
             if (parkingFee == null)
@@ -86,10 +80,10 @@ namespace ParkingService.Controllers
         [HttpPost]
         public async Task<ActionResult<ParkingFee>> PostParkingFee(ParkingFee parkingFee)
         {
-          if (_context.ParkingFees == null)
-          {
-              return Problem("Entity set 'APIDbContext.ParkingFees'  is null.");
-          }
+            if (_context.ParkingFees == null)
+            {
+                return Problem("Entity set 'APIDbContext.ParkingFees'  is null.");
+            }
             _context.ParkingFees.Add(parkingFee);
             await _context.SaveChangesAsync();
 
